@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full bg-[#dbe3ed]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Ettaro Coffee Studio - Accessible Mobile App</title>
+    <!-- Tailwind CSS for utility foundation -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Premium Google Fonts matching iOS visual hierarchy & maximum readability for elderly -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bai+Jamjuree:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for beautiful modern tactile icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        glassBrand: {
+                            50: '#f6f8fb',
+                            100: '#eef2f7',
+                            200: '#dbe3ed',
+                            500: '#007aff', /* iOS Glowing Blue from IMG_3380.JPG */
+                            600: '#0062cc',
+                            900: '#1c1c1e',
+                            gold: '#b4854b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Bai Jamjuree', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Neumorphism and Glassmorphism Styles mimicking IMG_3380.JPG */
+        body {
+            background-color: #dbe3ed;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow-x: hidden;
+        }
+
+        /* Hide Scrollbar while keeping functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Tactile Glassmorphic Neumorphic Card with high contrast text for senior citizens */
+        .neu-glass-card {
+            background: rgba(255, 255, 255, 0.65); /* Increased opacity for easier readability */
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 
+                6px 6px 18px rgba(163, 177, 198, 0.4), 
+                -6px -6px 18px rgba(255, 255, 255, 0.95),
+                inset 1px 1px 3px rgba(255, 255, 255, 0.6);
+        }
+
+        /* Tactile Inset Input Fields from IMG_3380.JPG */
+        .neu-inset-field {
+            background: rgba(225, 230, 238, 0.85);
+            box-shadow: 
+                inset 3px 3px 6px rgba(163, 177, 198, 0.5), 
+                inset -3px -3px 6px rgba(255, 255, 255, 0.95);
+            border: 1.5px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Glowing Blue Button from IMG_3380.JPG */
+        .neu-btn-glowing-blue {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 
+                0px 6px 16px rgba(37, 99, 235, 0.45),
+                3px 3px 8px rgba(163, 177, 198, 0.4), 
+                -3px -3px 8px rgba(255, 255, 255, 0.95),
+                inset 1px 1px 4px rgba(255, 255, 255, 0.5);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .neu-btn-glowing-blue:active {
+            box-shadow: 
+                0px 2px 6px rgba(37, 99, 235, 0.3),
+                inset 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transform: scale(0.97);
+        }
+
+        /* Standard Soft Neumorphic Button */
+        .neu-btn-soft {
+            background: rgba(245, 247, 250, 0.95);
+            box-shadow: 
+                4px 4px 10px rgba(163, 177, 198, 0.5), 
+                -4px -4px 10px rgba(255, 255, 255, 0.95),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.7);
+            border: 1.5px solid rgba(255, 255, 255, 0.7);
+            transition: all 0.2s ease;
+        }
+
+        .neu-btn-soft:active {
+            box-shadow: 
+                inset 3px 3px 6px rgba(163, 177, 198, 0.5), 
+                inset -3px -3px 6px rgba(255, 255, 255, 0.9);
+            transform: scale(0.97);
+        }
+
+        /* Neumorphic Active state highlights matching slider controls */
+        .neu-toggle-active {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                0px 3px 8px rgba(163, 177, 198, 0.6), 
+                -3px -3px 8px rgba(255, 255, 255, 0.95),
+                inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.9);
+            border: 1.5px solid rgba(37, 99, 235, 0.4);
+        }
+
+        /* Custom bottom sheet transition for iOS style sheet */
+        .bottom-sheet {
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-900 antialiased h-full flex items-center justify-center p-0 m-0">
+
+    <!-- iPhone 15 Pro Max Viewport boundaries (430px Width x 932px Height) - No Bezel, No Outer Frame, Clean Floating Screen -->
+    <div class="relative w-full max-w-[430px] h-full sm:h-[932px] bg-[#eef2f7] overflow-hidden flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-none sm:rounded-[40px]">
+        
+        <!-- iPhone Dynamic Island & Screen Notch space indicators - Designed for high visibility -->
+        <div class="absolute top-0 inset-x-0 h-11 bg-white/40 backdrop-blur-md flex items-center justify-between px-8 z-50 text-[15px] font-extrabold text-slate-900 border-b border-white/40">
+            <!-- Time Indicator (Slightly larger for senior citizens) -->
+            <span class="tracking-wide">9:41</span>
+            
+            <!-- Dynamic Island Capsule Area -->
+            <div class="w-28 h-6 bg-black rounded-full mx-auto hidden sm:block"></div>
+            
+            <!-- Accessible Network, Wifi, and Battery Icons -->
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-signal text-[13px]"></i>
+                <i class="fa-solid fa-wifi text-[13px]"></i>
+                <div class="w-6 h-3.5 border-2 border-slate-900 rounded flex items-center p-0.5">
+                    <div class="bg-slate-900 h-full w-full rounded-2xs"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safe Space Top Spacer to accommodate the iOS Top Bar -->
+        <div class="h-11 shrink-0"></div>
+
+        <!-- Accessible Brand Header (Large, Clear, High Contrast) -->
+        <header class="mx-4 my-3 px-4 py-4 neu-glass-card flex items-center justify-between relative z-10">
+            <div class="flex items-center space-x-3.5">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#2563eb]/20 to-[#2563eb]/40 border-2 border-white text-[#1d4ed8] shadow-md">
+                    <i class="fa-solid fa-mug-saucer text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-tight text-slate-950 leading-none">Ettaro Studio</h1>
+                    <p class="text-xs text-[#1d4ed8] font-black tracking-widest uppercase mt-0.5">ร้านกาแฟเพื่อคุณ</p>
+                </div>
+            </div>
+            
+            <!-- High visibility active counter badge -->
+            <div class="flex items-center space-x-2 bg-white/80 px-3 py-1.5 rounded-full border-2 border-white shadow-sm">
+                <span class="inline-flex h-3 w-3 rounded-full bg-emerald-600 shadow-sm animate-pulse"></span>
+                <span class="text-xs font-black text-slate-800 uppercase tracking-wider">เปิดบริการ</span>
+            </div>
+        </header>
+
+        <!-- Tab Content Window (Wrapper for dynamic view changes with senior-friendly layouts) -->
+        <div class="flex-1 overflow-hidden relative px-4 pb-24">
+            
+            <!-- VIEW 1: ORDERING (Active view on start) -->
+            <div id="view-order" class="h-full flex flex-col space-y-4 transition-all duration-300">
+                
+                <!-- Customer Name Bar & Quick Cart Indicator (Seniors can easily type and clear) -->
+                <div class="neu-glass-card p-4 flex flex-col gap-2.5">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm font-black text-slate-800 uppercase tracking-wide"><i class="fa-solid fa-tag text-[#1d4ed8] mr-1"></i> ชื่อย่อลูกค้าของคุณ:</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="flex-1 relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-600 text-base">
+                                <i class="fa-solid fa-user-tag"></i>
+                            </span>
+                            <input type="text" id="custNameInput" placeholder="กรอกชื่อลูกค้า เช่น คุณ สุรพล" 
+                                   class="pl-10 w-full h-12 neu-inset-field rounded-xl px-3 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2563eb] placeholder:text-slate-500">
+                        </div>
+                        <button onclick="clearCurrentCart()" class="w-12 h-12 neu-btn-soft rounded-xl flex items-center justify-center text-red-600 hover:text-red-700 shadow-sm border border-red-200" title="ล้างตะกร้า">
+                            <i class="fa-regular fa-trash-can text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Horizontal Category Tabs (Taller buttons, much easier to read and tap) -->
+                <div class="flex items-center space-x-3 overflow-x-auto no-scrollbar py-2 shrink-0">
+                    <button onclick="filterCategory('all')" id="tab-all" class="shrink-0 px-5 py-3 text-sm font-black rounded-full neu-btn-glowing-blue text-white">
+                        ทั้งหมด (30)
+                    </button>
+                    <button onclick="filterCategory('coffee')" id="tab-coffee" class="shrink-0 px-5 py-3 text-sm font-black rounded-full neu-btn-soft text-slate-800">
+                        ☕ กาแฟ (10)
+                    </button>
+                    <button onclick="filterCategory('soda')" id="tab-soda" class="shrink-0 px-5 py-3 text-sm font-black rounded-full neu-btn-soft text-slate-800">
+                        🥤 โซดา (5)
+                    </button>
+                    <button onclick="filterCategory('noncoffee')" id="tab-noncoffee" class="shrink-0 px-5 py-3 text-sm font-black rounded-full neu-btn-soft text-slate-800">
+                        🍵 ชา/โกโก้ (10)
+                    </button>
+                    <button onclick="filterCategory('milk')" id="tab-milk" class="shrink-0 px-5 py-3 text-sm font-black rounded-full neu-btn-soft text-slate-800">
+                        🥛 นมพิเศษ (5)
+                    </button>
+                </div>
+
+                <!-- 30 Drink Grid (Large clear text elements) -->
+                <div class="flex-1 overflow-y-auto no-scrollbar pr-0.5 pb-2">
+                    <div id="menuGrid" class="grid grid-cols-2 gap-4">
+                        <!-- Dynamic Drink Cards will render here -->
+                    </div>
+                </div>
+
+                <!-- Floating Order Checkout Summary (Super Clear, oversized text & button) -->
+                <div class="neu-glass-card p-4 flex items-center justify-between shadow-xl">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-800 relative border-2 border-white shadow">
+                            <i class="fa-solid fa-basket-shopping text-lg"></i>
+                            <span id="cartCountBadge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-black h-6 w-6 rounded-full flex items-center justify-center border-2 border-white">0</span>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-extrabold uppercase">ราคารวมทั้งสิ้น</p>
+                            <span id="cartTotalPrice" class="text-xl font-black text-[#1d4ed8]">0 ฿</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="submitOrder()" class="px-6 py-3.5 rounded-xl neu-btn-glowing-blue text-sm font-black text-white flex items-center space-x-2">
+                        <span>ส่งออเดอร์เข้าคิว</span>
+                        <i class="fa-solid fa-circle-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- VIEW 2: REAL-TIME QUEUE (Chronological sequence earliest first, large readable panels) -->
+            <div id="view-queue" class="h-full flex flex-col space-y-4 hidden transition-all duration-300">
+                
+                <div class="flex items-center justify-between shrink-0">
+                    <div>
+                        <h2 class="text-lg font-black text-slate-950">แดชบอร์ดติดตามคิวร้าน</h2>
+                        <p class="text-xs text-slate-600 font-extrabold">เรียงลำดับเวลา (ใครสั่งก่อนอยู่บนสุด)</p>
+                    </div>
+                    <span class="text-xs bg-slate-200 border border-white px-3 py-1.5 rounded-xl text-slate-800 font-black">
+                        <i class="fa-solid fa-arrow-down-1-9 mr-1 text-[#1d4ed8]"></i> เก่าสุดก่อน
+                    </span>
+                </div>
+
+                <!-- Live Status Counters with easy-to-read numbers -->
+                <div class="grid grid-cols-3 gap-3 shrink-0">
+                    <div class="neu-glass-card p-3 text-center border-l-4 border-l-amber-500">
+                        <div id="totalPendingBadge" class="text-xl font-black text-amber-700">0</div>
+                        <div class="text-xs font-black text-slate-600">รอปรุง</div>
+                    </div>
+                    <div class="neu-glass-card p-3 text-center border-l-4 border-l-[#2563eb]">
+                        <div id="totalPreparingBadge" class="text-xl font-black text-[#2563eb]">0</div>
+                        <div class="text-xs font-black text-slate-600">กำลังทำ</div>
+                    </div>
+                    <div class="neu-glass-card p-3 text-center border-l-4 border-l-emerald-600">
+                        <div id="totalCompletedBadge" class="text-xl font-black text-emerald-700">0</div>
+                        <div class="text-xs font-black text-slate-600">เสร็จเสิร์ฟ</div>
+                    </div>
+                </div>
+
+                <!-- Chronological list of orders (Large panels with actions) -->
+                <div class="flex-1 overflow-y-auto no-scrollbar pr-0.5 space-y-4">
+                    <div id="queueListContainer" class="space-y-4">
+                        <!-- Translucent customer orders render here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 3: SALES INSIGHTS & STATS -->
+            <div id="view-stats" class="h-full flex flex-col space-y-4 hidden transition-all duration-300">
+                
+                <div class="shrink-0">
+                    <h2 class="text-lg font-black text-slate-950">สถิติและยอดขายประจำวัน</h2>
+                    <p class="text-xs text-slate-600 font-extrabold">ข้อมูลเครื่องดื่มที่ทำเสิร์ฟสมบูรณ์แล้ว</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 shrink-0">
+                    <div class="neu-glass-card p-4 text-center">
+                        <p class="text-xs font-black text-slate-500 uppercase tracking-wider">เสร็จสิ้น (คิว)</p>
+                        <p id="statsTotalOrders" class="text-3xl font-black text-slate-950 mt-1">0</p>
+                    </div>
+                    <div class="neu-glass-card p-4 text-center">
+                        <p class="text-xs font-black text-slate-500 uppercase tracking-wider">ยอดขายสะสม</p>
+                        <p id="statsTotalRevenue" class="text-3xl font-black text-emerald-700 mt-1">0 ฿</p>
+                    </div>
+                </div>
+
+                <!-- Glass Category Progress Bars (Amplified fonts & high accessibility contrast) -->
+                <div class="neu-glass-card p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar">
+                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-wide border-b border-slate-200 pb-2">ความนิยมเครื่องดื่มตามหมวดหมู่</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs font-black text-slate-700 mb-1">
+                                <span>☕ กาแฟรสชาติพรีเมี่ยม</span>
+                                <span id="statQtyCoffee" class="text-slate-950">0 แก้ว</span>
+                            </div>
+                            <div class="w-full h-3.5 neu-inset-field rounded-full overflow-hidden">
+                                <div id="barCoffee" class="bg-amber-700 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs font-black text-slate-700 mb-1">
+                                <span>🥤 อิตาเลียนโซดา</span>
+                                <span id="statQtySoda" class="text-slate-950">0 แก้ว</span>
+                            </div>
+                            <div class="w-full h-3.5 neu-inset-field rounded-full overflow-hidden">
+                                <div id="barSoda" class="bg-[#2563eb] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs font-black text-slate-700 mb-1">
+                                <span>🍵 ชาและเครื่องดื่มอื่นๆ</span>
+                                <span id="statQtyNonCoffee" class="text-slate-950">0 แก้ว</span>
+                            </div>
+                            <div class="w-full h-3.5 neu-inset-field rounded-full overflow-hidden">
+                                <div id="barNonCoffee" class="bg-emerald-600 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs font-black text-slate-700 mb-1">
+                                <span>🥛 นมสดสูตรลับเฉพาะ</span>
+                                <span id="statQtyMilk" class="text-slate-950">0 แก้ว</span>
+                            </div>
+                            <div class="w-full h-3.5 neu-inset-field rounded-full overflow-hidden">
+                                <div id="barMilk" class="bg-indigo-600 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Customizer Bottom Slide-up Sheet (Highly responsive translucent modal with large clickable fields) -->
+        <div id="customSheet" class="absolute inset-x-0 bottom-0 bg-white/95 backdrop-blur-2xl border-t border-white/90 rounded-t-[36px] shadow-2xl z-40 transform translate-y-full bottom-sheet flex flex-col max-h-[85%]">
+            
+            <!-- Draggable indicator -->
+            <div class="w-14 h-2 bg-slate-300 rounded-full mx-auto my-3.5 shrink-0"></div>
+
+            <!-- Sheet Header -->
+            <div class="px-6 pb-4 border-b border-slate-200 flex items-center justify-between shrink-0">
+                <div>
+                    <span id="modalCategoryTag" class="text-xs font-black tracking-widest uppercase bg-[#2563eb]/10 text-[#1d4ed8] px-3.5 py-1 rounded-full border border-[#2563eb]/20">COFFEE</span>
+                    <h3 id="modalDrinkName" class="text-lg font-black text-slate-950 mt-1.5">คาปูชิโน่เย็น</h3>
+                </div>
+                <button onclick="closeCustomSheet()" class="w-10 h-10 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center text-slate-800 border-2 border-white transition-all">
+                    <i class="fa-solid fa-times text-base"></i>
+                </button>
+            </div>
+
+            <!-- Customizer Options (Oversized elements optimized for seniors) -->
+            <div class="p-6 space-y-5 overflow-y-auto no-scrollbar flex-1 pb-12">
+                
+                <!-- 1. Selection of Milks -->
+                <div id="milkSection" class="space-y-3">
+                    <label class="block text-xs font-black text-slate-700 uppercase tracking-wider">
+                        🥛 1. เลือกประเภทนม (มี 3 แบบ):
+                    </label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="milkOption" value="นมวัว" checked class="sr-only peer">
+                            <div class="p-3.5 text-center rounded-xl border-2 border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 peer-checked:bg-white peer-checked:border-[#2563eb] peer-checked:shadow transition-all">
+                                <span class="block text-sm font-black text-slate-900">นมวัว</span>
+                                <span class="text-xs text-slate-500 font-bold mt-0.5 block">ปกติ (ฟรี)</span>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="milkOption" value="นมแพะ" class="sr-only peer">
+                            <div class="p-3.5 text-center rounded-xl border-2 border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 peer-checked:bg-white peer-checked:border-[#2563eb] peer-checked:shadow transition-all">
+                                <span class="block text-sm font-black text-slate-900">นมแพะ</span>
+                                <span class="text-xs text-[#1d4ed8] font-black mt-0.5 block">+15 ฿</span>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="milkOption" value="นมโอ๊ต" class="sr-only peer">
+                            <div class="p-3.5 text-center rounded-xl border-2 border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 peer-checked:bg-white peer-checked:border-[#2563eb] peer-checked:shadow transition-all">
+                                <span class="block text-sm font-black text-slate-900">นมโอ๊ต</span>
+                                <span class="text-xs text-[#1d4ed8] font-black mt-0.5 block">+20 ฿</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 2. Sweetness Option Selection -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-black text-slate-700 uppercase tracking-wider">
+                        🍬 2. ระดับความหวานที่ต้องการ:
+                    </label>
+                    <div class="grid grid-cols-4 gap-2.5">
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="sweetnessOption" value="25%" class="sr-only peer">
+                            <div class="py-3 text-center rounded-xl border-2 border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 peer-checked:bg-white peer-checked:border-[#2563eb] peer-checked:shadow transition-all">
+                                <span class="text-sm font-black text-slate-900">25%</span>
+                                <span class="text-[10px] text-slate-600 font-extrabold block mt-0.5 leading-none">หวานน้อย</span>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="sweetnessOption" value="50%" class="sr-only peer">
+                            <div class="py-3 text-center rounded-xl border-2 border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 peer-checked:bg-white peer-checked:border-[#2563eb] peer-checked:shadow transition-all">
+                                <span class="text-sm font-black text-slate-900">50%</span>
+                                <span class="text-[10px] text-slate-600 font-extrabold block mt-0.5 leading-none">หวานกลาง</span>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="sweetnessOption" value="75%" checked class="sr-only peer">
+                            <div class="py-3 text-center rounded-xl border-2 border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 peer-checked:bg-white peer-checked:border-[#2563eb] peer-checked:shadow transition-all">
+                                <span class="text-sm font-black text-[#1d4ed8]">75%</span>
+                                <span class="text-[10px] text-[#1d4ed8] font-black block mt-0.5 leading-none">กลมกล่อม</span>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="sweetnessOption" value="100%" class="sr-only peer">
+                            <div class="py-3 text-center rounded-xl border-2 border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 peer-checked:bg-white peer-checked:border-[#2563eb] peer-checked:shadow transition-all">
+                                <span class="text-sm font-black text-slate-900">100%</span>
+                                <span class="text-[10px] text-slate-600 font-extrabold block mt-0.5 leading-none">หวานปกติ</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 3. Toppings Selection -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-black text-slate-700 uppercase tracking-wider">
+                        ✨ 3. ท็อปปิ้งเพิ่มเติม (เลือกได้มากกว่า 1 ข้อ):
+                    </label>
+                    <div class="space-y-2.5">
+                        <label class="flex items-center justify-between p-4 rounded-xl border-2 border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 cursor-pointer transition-all">
+                            <div class="flex items-center space-x-3">
+                                <input type="checkbox" name="toppingOption" value="วิปครีม" class="h-6 w-6 rounded border-slate-300 accent-[#2563eb]">
+                                <span class="text-sm font-black text-slate-900">วิปครีมนุ่มละมุน</span>
+                            </div>
+                            <span class="text-sm font-black text-[#1d4ed8]">+15 ฿</span>
+                        </label>
+                        
+                        <label class="flex items-center justify-between p-4 rounded-xl border-2 border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 cursor-pointer transition-all">
+                            <div class="flex items-center space-x-3">
+                                <input type="checkbox" name="toppingOption" value="ช็อกโกแลต" class="h-6 w-6 rounded border-slate-300 accent-[#2563eb]">
+                                <span class="text-sm font-black text-slate-900">ซอสช็อกโกแลตเข้มข้น</span>
+                            </div>
+                            <span class="text-sm font-black text-[#1d4ed8]">+10 ฿</span>
+                        </label>
+                        
+                        <label class="flex items-center justify-between p-4 rounded-xl border-2 border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 cursor-pointer transition-all">
+                            <div class="flex items-center space-x-3">
+                                <input type="checkbox" name="toppingOption" value="ไข่มุก" class="h-6 w-6 rounded border-slate-300 accent-[#2563eb]">
+                                <span class="text-sm font-black text-slate-900">ไข่มุกหนึบหนับ</span>
+                            </div>
+                            <span class="text-sm font-black text-[#1d4ed8]">+10 ฿</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Customizer Action Sheet Footer -->
+            <div class="p-6 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
+                <div>
+                    <span class="text-xs text-slate-500 font-extrabold uppercase">ราคาสุทธิ</span>
+                    <span id="modalPriceLabel" class="text-2xl font-black text-[#1d4ed8] block">0 ฿</span>
+                </div>
+                <button onclick="addItemToCartFromSheet()" class="px-8 py-4 rounded-xl neu-btn-glowing-blue text-sm font-black text-white shadow-md">
+                    ใส่ตะกร้าออเดอร์
+                </button>
+            </div>
+        </div>
+
+        <!-- Persistent Bottom Navigation Bar (Large icons and labels designed for effortless tapping) -->
+        <nav class="absolute bottom-5 inset-x-4 h-18 neu-glass-card p-2 flex items-center justify-between z-30">
+            <button onclick="switchTab('order')" id="nav-order" class="flex-1 h-full rounded-2xl flex flex-col items-center justify-center text-[#2563eb] neu-toggle-active transition-all duration-200">
+                <i class="fa-solid fa-mug-hot text-lg"></i>
+                <span class="text-[11px] font-black mt-1 tracking-wide uppercase">สั่งกาแฟ</span>
+            </button>
+            
+            <button onclick="switchTab('queue')" id="nav-queue" class="flex-1 h-full rounded-2xl flex flex-col items-center justify-center text-slate-600 hover:text-slate-800 transition-all duration-200 relative">
+                <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+                <span class="text-[11px] font-black mt-1 tracking-wide uppercase">คิวออเดอร์</span>
+                <!-- Active Badge Notification -->
+                <span id="queueActiveNotif" class="absolute top-2 right-6 h-3 w-3 rounded-full bg-amber-500 animate-pulse hidden"></span>
+            </button>
+            
+            <button onclick="switchTab('stats')" id="nav-stats" class="flex-1 h-full rounded-2xl flex flex-col items-center justify-center text-slate-600 hover:text-slate-800 transition-all duration-200">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+                <span class="text-[11px] font-black mt-1 tracking-wide uppercase">ยอดขายร้าน</span>
+            </button>
+        </nav>
+
+        <!-- System Toast Notification (Tactile high visibility alert popup) -->
+        <div id="toast" class="absolute bottom-24 inset-x-4 bg-slate-900/95 backdrop-blur-md text-white px-5 py-4 rounded-2xl shadow-2xl z-50 flex items-center space-x-3.5 text-sm font-bold opacity-0 pointer-events-none transition-all duration-300">
+            <span id="toastIcon" class="text-lg"><i class="fa-solid fa-check-circle text-emerald-400"></i></span>
+            <span id="toastMessage" class="flex-1">ดำเนินการเสร็จสิ้น</span>
+        </div>
+
+        <!-- Touch Backdrop Overlay -->
+        <div id="sheetBackdrop" onclick="closeCustomSheet()" class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm z-30 hidden transition-opacity duration-300 opacity-0"></div>
+
+    </div>
+
+    <script>
+        // Full accessible dataset of Exactly 30 Drinks
+        const DRINK_MENUS = [
+            // 1. Coffee Menus (10 items)
+            { id: 1, name: "เอสเพรสโซ่ พรีเมี่ยม (Espresso)", price: 60, category: "coffee", icon: "☕", requiresMilk: false },
+            { id: 2, name: "อเมริกาโน่ ส้มสด (Orange Americano)", price: 70, category: "coffee", icon: "🍊", requiresMilk: false },
+            { id: 3, name: "ลาเต้ คลาสสิกนุ่มนวล (Classic Latte)", price: 75, category: "coffee", icon: "🥛", requiresMilk: true },
+            { id: 4, name: "คาปูชิโน่ ฟองละมุน (Cappuccino)", price: 75, category: "coffee", icon: "☁️", requiresMilk: true },
+            { id: 5, name: "มอคค่า อัลมอนด์พรีเมี่ยม (Mocha)", price: 85, category: "coffee", icon: "🍫", requiresMilk: true },
+            { id: 6, name: "คาราเมลมัคคิอาโต้ (Macchiato)", price: 85, category: "coffee", icon: "🍯", requiresMilk: true },
+            { id: 7, name: "เดอร์ตี้คอฟฟี่ แยกชั้น (Dirty Coffee)", price: 90, category: "coffee", icon: "🥛", requiresMilk: true },
+            { id: 8, name: "โคลด์บรูว์ โทนิคซีตรัส (Cold Brew)", price: 85, category: "coffee", icon: "🍋", requiresMilk: false },
+            { id: 9, name: "อัฟโฟกาโต้ ครีมมี่วนิลา (Affogato)", price: 95, category: "coffee", icon: "🍨", requiresMilk: true },
+            { id: 10, name: "กาแฟน้ำมะพร้าวสด (Coconut Espresso)", price: 90, category: "coffee", icon: "🥥", requiresMilk: false },
+
+            // 2. Refreshing Italian Soda Menus (5 items)
+            { id: 11, name: "บลูเลมอนสปาร์คกิ้ง (Blue Lemon)", price: 55, category: "soda", icon: "🥤", requiresMilk: false },
+            { id: 12, name: "สตรอว์เบอร์รี่รูบี้โซดา (Strawberry)", price: 55, category: "soda", icon: "🍓", requiresMilk: false },
+            { id: 13, name: "กีวี่พาราไดซ์ ฟิซซี่ (Kiwi Fizz)", price: 55, category: "soda", icon: "🥝", requiresMilk: false },
+            { id: 14, name: "พีชบลอสซั่มโซดา (Peach Soda)", price: 60, category: "soda", icon: "🍑", requiresMilk: false },
+            { id: 15, name: "ลิ้นจี่รอยัลโซดา (Lychee Breeze)", price: 60, category: "soda", icon: "🍒", requiresMilk: false },
+
+            // 3. Non-Coffee Menus (10 items)
+            { id: 16, name: "มัทฉะอูจิแท้พรีเมี่ยม (Uji Matcha)", price: 85, category: "noncoffee", icon: "🍵", requiresMilk: true },
+            { id: 17, name: "โกโก้ดาร์กเข้มข้นจัด (Dark Cocoa)", price: 70, category: "noncoffee", icon: "🍫", requiresMilk: true },
+            { id: 18, name: "ชาไทยต้นตำรับโบราณ (Thai Tea)", price: 65, category: "noncoffee", icon: "🍂", requiresMilk: true },
+            { id: 19, name: "ชานมไต้หวันไข่มุกพรีเมี่ยม (Milk Tea)", price: 65, category: "noncoffee", icon: "🧋", requiresMilk: true },
+            { id: 20, name: "โฮจิฉะลาเต้คั่วหอม (Hojicha)", price: 85, category: "noncoffee", icon: "🌾", requiresMilk: true },
+            { id: 21, name: "ชาดำน้ำผึ้งมะนาวแท้ (Honey Lemon)", price: 60, category: "noncoffee", icon: "🍯", requiresMilk: false },
+            { id: 22, name: "ชาเก๊กฮวยเปปเปอร์มิ้นท์ (Chamomile)", price: 65, category: "noncoffee", icon: "🌼", requiresMilk: false },
+            { id: 23, name: "เผือกหอมลาเต้ครีมมี่ (Taro Milk)", price: 75, category: "noncoffee", icon: "🍠", requiresMilk: true },
+            { id: 24, name: "โกโก้มิ้นท์สี่ชั้น (Mint Cocoa)", price: 75, category: "noncoffee", icon: "🌱", requiresMilk: true },
+            { id: 25, name: "นมชมพูสูตรหวานรื่นรมย์ (Nom Yen)", price: 55, category: "noncoffee", icon: "🌸", requiresMilk: true },
+
+            // 4. Special Milk Menus (5 items)
+            { id: 26, name: "นมมันม่วงโอกินาว่า (Okinawa Taro)", price: 80, category: "milk", icon: "🍠", requiresMilk: true },
+            { id: 27, name: "นมเมลอนฮอกไกโดหวานฉ่ำ (Melon)", price: 80, category: "milk", icon: "🍈", requiresMilk: true },
+            { id: 28, name: "นมสดบราวน์ชูการ์ไข่มุก (Brown Sugar)", price: 85, category: "milk", icon: "🧋", requiresMilk: true },
+            { id: 29, name: "นมเกลือทะเลคาราเมลลาเต้ (Salted)", price: 85, category: "milk", icon: "🧂", requiresMilk: true },
+            { id: 30, name: "นมสดกลิ่นวนิลาลาเวนเดอร์ (Lavender)", price: 80, category: "milk", icon: "🪻", requiresMilk: true }
+        ];
+
+        // Global Variables / State Management
+        let currentCart = [];
+        let currentlySelectedDrink = null;
+        let selectedCategory = 'all';
+        let currentActiveTab = 'order';
+        let globalQueueCounter = 6;
+
+        // At least 5 Chronological mockup orders to instantly demonstrate wait-times to elderly users
+        let queueList = [
+            {
+                id: "order-1",
+                queueNo: "ET-001",
+                customerName: "คุณ นงพะงา (ผู้ใหญ่อาวุโส)",
+                time: new Date(Date.now() - 40 * 60 * 1000).toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'}),
+                timestamp: Date.now() - 40 * 60 * 1000,
+                status: "Completed",
+                items: [
+                    { name: "ลาเต้ คลาสสิกนุ่มนวล (Classic Latte)", qty: 1, customText: "นมโอ๊ต (+20 ฿), หวาน 50%, ท็อปปิ้ง: วิปครีม (+15 ฿)", finalPrice: 110 },
+                    { name: "บลูเลมอนสปาร์คกิ้ง (Blue Lemon)", qty: 1, customText: "หวาน 100%", finalPrice: 55 }
+                ],
+                totalAmount: 165,
+                prepTimeMin: 10,
+                prepTimeMax: 14
+            },
+            {
+                id: "order-2",
+                queueNo: "ET-002",
+                customerName: "คุณ ลุงรัชภูมิ",
+                time: new Date(Date.now() - 25 * 60 * 1000).toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'}),
+                timestamp: Date.now() - 25 * 60 * 1000,
+                status: "Preparing",
+                items: [
+                    { name: "โกโก้ดาร์กเข้มข้นจัด (Dark Cocoa)", qty: 1, customText: "นมแพะ (+15 ฿), หวาน 75%, ท็อปปิ้ง: ไข่มุก (+10 ฿)", finalPrice: 95 }
+                ],
+                totalAmount: 95,
+                prepTimeMin: 5,
+                prepTimeMax: 7
+            },
+            {
+                id: "order-3",
+                queueNo: "ET-003",
+                customerName: "คุณ ป้าเขมวิทย์",
+                time: new Date(Date.now() - 18 * 60 * 1000).toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'}),
+                timestamp: Date.now() - 18 * 60 * 1000,
+                status: "Preparing",
+                items: [
+                    { name: "มัทฉะอูจิแท้พรีเมี่ยม (Uji Matcha)", qty: 1, customText: "นมโอ๊ต (+20 ฿), หวาน 25%, ท็อปปิ้ง: วิปครีม (+15 ฿)", finalPrice: 120 },
+                    { name: "คาราเมลมัคคิอาโต้ (Macchiato)", qty: 1, customText: "นมวัว, หวาน 75%", finalPrice: 85 },
+                    { name: "พีชบลอสซั่มโซดา (Peach Soda)", qty: 1, customText: "หวาน 75%, ท็อปปิ้ง: ไข่มุก (+10 ฿)", finalPrice: 70 }
+                ],
+                totalAmount: 275,
+                prepTimeMin: 15,
+                prepTimeMax: 20 // 3 cups = Exactly 15-20 mins (+-5 min) as requested
+            },
+            {
+                id: "order-4",
+                queueNo: "ET-004",
+                customerName: "คุณ ยายธัญวรัตม์",
+                time: new Date(Date.now() - 10 * 60 * 1000).toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'}),
+                timestamp: Date.now() - 10 * 60 * 1000,
+                status: "Pending",
+                items: [
+                    { name: "นมสดบราวน์ชูการ์ไข่มุก (Brown Sugar)", qty: 1, customText: "นมวัว, หวาน 100%, ท็อปปิ้ง: วิปครีม (+15 ฿)", finalPrice: 100 }
+                ],
+                totalAmount: 100,
+                prepTimeMin: 5,
+                prepTimeMax: 7
+            },
+            {
+                id: "order-5",
+                queueNo: "ET-005",
+                customerName: "คุณ ตาปิยบุตร",
+                time: new Date(Date.now() - 5 * 60 * 1000).toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'}),
+                timestamp: Date.now() - 5 * 60 * 1000,
+                status: "Pending",
+                items: [
+                    { name: "เอสเพรสโซ่ พรีเมี่ยม (Espresso)", qty: 1, customText: "หวาน 50%", finalPrice: 60 },
+                    { name: "นมสดกลิ่นวนิลาลาเวนเดอร์ (Lavender)", qty: 1, customText: "นมโอ๊ต (+20 ฿), หวาน 75%", finalPrice: 100 }
+                ],
+                totalAmount: 160,
+                prepTimeMin: 10,
+                prepTimeMax: 14
+            }
+        ];
+
+        // System load initiation
+        window.onload = function() {
+            renderMenuList();
+            renderQueueScreen();
+            calculateAndDisplayStats();
+        }
+
+        // Switch bottom tabs seamlessly
+        function switchTab(targetTab) {
+            currentActiveTab = targetTab;
+            
+            // Hide all tab screens
+            document.getElementById('view-order').classList.add('hidden');
+            document.getElementById('view-queue').classList.add('hidden');
+            document.getElementById('view-stats').classList.add('hidden');
+
+            // Un-active navigation styling
+            const navBtnOrder = document.getElementById('nav-order');
+            const navBtnQueue = document.getElementById('nav-queue');
+            const navBtnStats = document.getElementById('nav-stats');
+
+            navBtnOrder.className = "flex-1 h-full rounded-2xl flex flex-col items-center justify-center text-slate-600 hover:text-slate-800 transition-all duration-200";
+            navBtnQueue.className = "flex-1 h-full rounded-2xl flex flex-col items-center justify-center text-slate-600 hover:text-slate-800 transition-all duration-200 relative";
+            navBtnStats.className = "flex-1 h-full rounded-2xl flex flex-col items-center justify-center text-slate-600 hover:text-slate-800 transition-all duration-200";
+
+            // Reveal targeted screen
+            document.getElementById(`view-${targetTab}`).classList.remove('hidden');
+
+            // Highlight chosen navigation indicator
+            const activeBtn = document.getElementById(`nav-${targetTab}`);
+            activeBtn.className = "flex-1 h-full rounded-2xl flex flex-col items-center justify-center text-[#2563eb] neu-toggle-active transition-all duration-200";
+
+            if (targetTab === 'queue') {
+                document.getElementById('queueActiveNotif').classList.add('hidden');
+            }
+        }
+
+        // Filter menu lists
+        function filterCategory(category) {
+            selectedCategory = category;
+            
+            const tabs = ['all', 'coffee', 'soda', 'noncoffee', 'milk'];
+            tabs.forEach(tab => {
+                const button = document.getElementById(`tab-${tab}`);
+                if (tab === category) {
+                    button.className = "shrink-0 px-5 py-3 text-sm font-black rounded-full neu-btn-glowing-blue text-white";
+                } else {
+                    button.className = "shrink-0 px-5 py-3 text-sm font-black rounded-full neu-btn-soft text-slate-800";
+                }
+            });
+
+            renderMenuList();
+        }
+
+        // Render Drink Menu Cards (Large font optimization for seniors)
+        function renderMenuList() {
+            const gridContainer = document.getElementById('menuGrid');
+            gridContainer.innerHTML = '';
+
+            const filteredDrinks = DRINK_MENUS.filter(drink => {
+                return selectedCategory === 'all' || drink.category === selectedCategory;
+            });
+
+            filteredDrinks.forEach(drink => {
+                const card = document.createElement('div');
+                card.className = "neu-glass-card p-4 flex flex-col justify-between cursor-pointer hover:scale-[1.02] transition-transform duration-200 min-h-[175px] border-2";
+                card.onclick = () => openCustomSheet(drink);
+
+                let badgeColor = "";
+                let subName = "";
+                if (drink.category === 'coffee') { badgeColor = "bg-amber-100 text-amber-900 border-amber-200"; subName = "กาแฟสด"; }
+                else if (drink.category === 'soda') { badgeColor = "bg-sky-100 text-[#1d4ed8] border-sky-200"; subName = "โซดาซ่า"; }
+                else if (drink.category === 'noncoffee') { badgeColor = "bg-emerald-100 text-emerald-900 border-emerald-200"; subName = "ชานม/โกโก้"; }
+                else { badgeColor = "bg-indigo-100 text-indigo-900 border-indigo-200"; subName = "สูตรนมพิเศษ"; }
+
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-black px-2.5 py-1 rounded-full border ${badgeColor}">${subName}</span>
+                            <span class="text-2xl">${drink.icon}</span>
+                        </div>
+                        <h4 class="font-black text-slate-950 text-sm leading-tight">${drink.name}</h4>
+                    </div>
+                    <div class="mt-3 flex items-center justify-between border-t border-slate-300/40 pt-2.5">
+                        <span class="text-[10px] font-black text-slate-500 uppercase">ราคาปกติ</span>
+                        <span class="text-base font-black text-slate-950">${drink.price} ฿</span>
+                    </div>
+                `;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        // Open Bottom Sheet Customizer for Seniors
+        function openCustomSheet(drink) {
+            currentlySelectedDrink = drink;
+
+            document.getElementById('modalDrinkName').innerText = drink.name;
+            document.getElementById('modalCategoryTag').innerText = drink.category.toUpperCase();
+
+            // Setup milk types availability
+            const milkDiv = document.getElementById('milkSection');
+            if (drink.requiresMilk) {
+                milkDiv.classList.remove('hidden');
+                const defaultMilk = document.getElementsByName('milkOption');
+                defaultMilk[0].checked = true; // resets milk selection to cow milk
+            } else {
+                milkDiv.classList.add('hidden');
+            }
+
+            // Reset sweetness levels to signature 75%
+            const defaultSweetness = document.getElementsByName('sweetnessOption');
+            defaultSweetness[2].checked = true; // Index 2 is 75% (กลมกล่อม)
+
+            // Clean previous toppings
+            const defaultToppings = document.getElementsByName('toppingOption');
+            defaultToppings.forEach(cb => cb.checked = false);
+
+            calculateSheetPrice();
+
+            // Toggle Visual Sheet Classes
+            const sheet = document.getElementById('customSheet');
+            const backdrop = document.getElementById('sheetBackdrop');
+
+            backdrop.classList.remove('hidden');
+            setTimeout(() => {
+                backdrop.classList.add('opacity-100');
+                sheet.classList.remove('translate-y-full');
+            }, 30);
+
+            // Trigger real-time pricing recalculations
+            const allInputs = sheet.querySelectorAll('input');
+            allInputs.forEach(inp => inp.onchange = calculateSheetPrice);
+        }
+
+        // Close Customizer bottom popup sheet
+        function closeCustomSheet() {
+            const sheet = document.getElementById('customSheet');
+            const backdrop = document.getElementById('sheetBackdrop');
+
+            sheet.classList.add('translate-y-full');
+            backdrop.classList.remove('opacity-100');
+            setTimeout(() => {
+                backdrop.classList.add('hidden');
+            }, 300);
+        }
+
+        // Compute pricing of customized beverage parameters
+        function fetchCustomizerOptions() {
+            if (!currentlySelectedDrink) return null;
+
+            let finalPrice = currentlySelectedDrink.price;
+            let descriptiveTags = [];
+
+            // Milk selections (นมวัว, นมแพะ, นมโอ๊ต)
+            if (currentlySelectedDrink.requiresMilk) {
+                const selectedMilk = document.querySelector('input[name="milkOption"]:checked').value;
+                if (selectedMilk === 'นมแพะ') {
+                    finalPrice += 15;
+                    descriptiveTags.push('นมแพะ (+15 ฿)');
+                } else if (selectedMilk === 'นมโอ๊ต') {
+                    finalPrice += 20;
+                    descriptiveTags.push('นมโอ๊ต (+20 ฿)');
+                } else {
+                    descriptiveTags.push('นมวัว');
+                }
+            }
+
+            // Sweetness Selections (25%, 50%, 75%, 100%)
+            const sweetness = document.querySelector('input[name="sweetnessOption"]:checked').value;
+            descriptiveTags.push(`หวาน ${sweetness}`);
+
+            // Topping additions (วิปครีม, ช็อกโกแลต, ไข่มุก)
+            let toppingsChosen = [];
+            const activeToppings = document.querySelectorAll('input[name="toppingOption"]:checked');
+            activeToppings.forEach(top => {
+                toppingsChosen.push(top.value);
+                if (top.value === 'วิปครีม') finalPrice += 15;
+                if (top.value === 'ช็อกโกแลต') finalPrice += 10;
+                if (top.value === 'ไข่มุก') finalPrice += 10;
+            });
+
+            if (toppingsChosen.length > 0) {
+                descriptiveTags.push(`ท็อปปิ้ง: ${toppingsChosen.join(', ')}`);
+            }
+
+            return {
+                name: currentlySelectedDrink.name,
+                category: currentlySelectedDrink.category,
+                basePrice: currentlySelectedDrink.price,
+                finalPrice: finalPrice,
+                customText: descriptiveTags.join(', '),
+                qty: 1
+            };
+        }
+
+        function calculateSheetPrice() {
+            const stats = fetchCustomizerOptions();
+            if (stats) {
+                document.getElementById('modalPriceLabel').innerText = `${stats.finalPrice} ฿`;
+            }
+        }
+
+        // Insert custom beverage item into active customer cart
+        function addItemToCartFromSheet() {
+            const selection = fetchCustomizerOptions();
+            if (selection) {
+                currentCart.push(selection);
+                renderActiveCartSummary();
+                closeCustomSheet();
+                fireSystemToast(`เพิ่ม ${selection.name} เรียบร้อยแล้ว`);
+            }
+        }
+
+        function renderActiveCartSummary() {
+            const countLabel = document.getElementById('cartCountBadge');
+            const totalLabel = document.getElementById('cartTotalPrice');
+
+            let costAccumulator = 0;
+            currentCart.forEach(item => costAccumulator += item.finalPrice);
+
+            countLabel.innerText = currentCart.length;
+            totalLabel.innerText = `${costAccumulator} ฿`;
+        }
+
+        function clearCurrentCart() {
+            if (currentCart.length === 0) return;
+            currentCart = [];
+            renderActiveCartSummary();
+            fireSystemToast("ล้างรายการในตะกร้าเรียบร้อยแล้ว", "warning");
+        }
+
+        // Show elegant high visibility toast notifications
+        function fireSystemToast(msg, style = "success") {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastText.innerText = msg;
+            if (style === 'success') {
+                toastIcon.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 text-xl"></i>';
+            } else {
+                toastIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-amber-400 text-xl"></i>';
+            }
+
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // Post current compiled order into chronological line queues
+        function submitOrder() {
+            const nameField = document.getElementById('custNameInput');
+            const customerNameInput = nameField.value.trim() || `คุณลูกค้าคิวที่ #${globalQueueCounter}`;
+
+            if (currentCart.length === 0) {
+                fireSystemToast("โปรดเลือกกาแฟหรือเครื่องดื่มอย่างน้อย 1 แก้วเพื่อส่งคิว", "warning");
+                return;
+            }
+
+            // EXACT SPEC: 3 cups = ~15 to 20 minutes (+-5 minutes margins)
+            // Mathematical formula to dynamically compute preparation times for any number of cups:
+            const totalCups = currentCart.length;
+            const computedMin = totalCups * 5;
+            const computedMax = Math.ceil(totalCups * 6.6);
+
+            const netCost = currentCart.reduce((sum, unit) => sum + unit.finalPrice, 0);
+            const queueCode = `ET-${String(globalQueueCounter).padStart(3, '0')}`;
+
+            const orderModel = {
+                id: `order-${Date.now()}`,
+                queueNo: queueCode,
+                customerName: customerNameInput,
+                time: new Date().toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'}),
+                timestamp: Date.now(),
+                status: "Pending",
+                items: [...currentCart],
+                totalAmount: netCost,
+                prepTimeMin: computedMin,
+                prepTimeMax: computedMax
+            };
+
+            queueList.push(orderModel);
+            globalQueueCounter++;
+
+            // Clean state & active layout values
+            nameField.value = "";
+            currentCart = [];
+            
+            renderActiveCartSummary();
+            renderQueueScreen();
+            calculateAndDisplayStats();
+            
+            // Set alert badge on the bottom Queue Tab as visual attention draw
+            document.getElementById('queueActiveNotif').classList.remove('hidden');
+            fireSystemToast(`ส่งออเดอร์ ${queueCode} ของคุณสำเร็จแล้ว!`);
+        }
+
+        // Delete order records from existing lists
+        function deleteOrderRecord(id) {
+            const index = queueList.findIndex(o => o.id === id);
+            if (index !== -1) {
+                const name = queueList[index].customerName;
+                queueList.splice(index, 1);
+                renderQueueScreen();
+                calculateAndDisplayStats();
+                fireSystemToast(`ลบคิวของ ${name} เรียบร้อยแล้ว`, "warning");
+            }
+        }
+
+        // Modify current production statuses
+        function progressOrderStatus(id, newStatus) {
+            const item = queueList.find(o => o.id === id);
+            if (item) {
+                item.status = newStatus;
+                renderQueueScreen();
+                calculateAndDisplayStats();
+                fireSystemToast(`เปลี่ยนสถานะคิว ${item.queueNo} เป็นเรียบร้อยแล้ว`);
+            }
+        }
+
+        // Render chronological line queues (earliest always showing first)
+        function renderQueueScreen() {
+            const container = document.getElementById('queueListContainer');
+            container.innerHTML = '';
+
+            // Chronological Sorting: Earliest timestamp shows up at the absolute top first
+            const sortedTimeline = [...queueList].sort((a, b) => a.timestamp - b.timestamp);
+
+            let pending = 0;
+            let prep = 0;
+            let completed = 0;
+
+            if (sortedTimeline.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 neu-glass-card">
+                        <i class="fa-regular fa-folder-open text-slate-300 text-4xl mb-3"></i>
+                        <p class="text-slate-500 font-black text-sm">ไม่มีเครื่องดื่มค้างในรายการ</p>
+                    </div>
+                `;
+                return;
+            }
+
+            sortedTimeline.forEach((order, positionIndex) => {
+                if (order.status === 'Pending') pending++;
+                else if (order.status === 'Preparing') prep++;
+                else if (order.status === 'Completed') completed++;
+
+                let statusBadge = "";
+                let actionsHTML = "";
+
+                if (order.status === 'Pending') {
+                    statusBadge = `<span class="px-3 py-1 bg-amber-100 text-amber-950 text-xs font-black rounded-lg border border-amber-300"><i class="fa-solid fa-clock animate-pulse mr-1"></i>รอเริ่มปรุง</span>`;
+                    actionsHTML = `
+                        <button onclick="progressOrderStatus('${order.id}', 'Preparing')" class="px-4 py-2.5 rounded-lg text-xs font-black neu-btn-glowing-blue text-white shadow">
+                            เริ่มทำทันที
+                        </button>
+                    `;
+                } else if (order.status === 'Preparing') {
+                    statusBadge = `<span class="px-3 py-1 bg-sky-100 text-[#1d4ed8] text-xs font-black rounded-lg border border-sky-300"><i class="fa-solid fa-hourglass-start animate-spin mr-1"></i>กำลังปรุง</span>`;
+                    actionsHTML = `
+                        <button onclick="progressOrderStatus('${order.id}', 'Completed')" class="px-4 py-2.5 rounded-lg text-xs font-black bg-emerald-600 hover:bg-emerald-700 text-white shadow border border-emerald-500">
+                            เสร็จพร้อมเสิร์ฟ
+                        </button>
+                    `;
+                } else {
+                    statusBadge = `<span class="px-3 py-1 bg-emerald-100 text-emerald-950 text-xs font-black rounded-lg border border-emerald-300"><i class="fa-solid fa-check-double mr-1"></i>เสิร์ฟเรียบร้อย</span>`;
+                    actionsHTML = `<span class="text-emerald-700 text-xs font-black flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-lg"></i> ส่งมอบแล้ว</span>`;
+                }
+
+                // Compile item tags with enlarged description lines
+                let menuLineItems = "";
+                order.items.forEach(drink => {
+                    menuLineItems += `
+                        <div class="py-2.5 border-b border-slate-300/40 last:border-0 flex justify-between items-start text-xs">
+                            <div>
+                                <span class="font-black text-slate-950">${drink.qty}x ${drink.name}</span>
+                                <span class="block text-[11px] text-[#1d4ed8] font-black leading-snug mt-1">${drink.customText}</span>
+                            </div>
+                            <span class="font-black text-slate-950">${drink.finalPrice} ฿</span>
+                        </div>
+                    `;
+                });
+
+                const visualTimelineIndex = positionIndex + 1;
+
+                const card = document.createElement('div');
+                card.className = `neu-glass-card p-4.5 space-y-3.5 relative transition-all duration-300 border-2 ${order.status === 'Preparing' ? 'border-[#2563eb] shadow-[0_4px_20px_rgba(37,99,235,0.15)]' : ''}`;
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-slate-950 text-white font-mono text-xs font-black px-2.5 py-1 rounded-md shadow">${order.queueNo}</span>
+                            <span class="text-xs font-black text-slate-500">ลำดับคิวในระบบ #${visualTimelineIndex}</span>
+                        </div>
+                        <div class="flex items-center space-x-2.5">
+                            ${statusBadge}
+                            <button onclick="deleteOrderRecord('${order.id}')" class="text-slate-400 hover:text-red-600 p-1">
+                                <i class="fa-solid fa-trash text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-base font-black text-slate-950">${order.customerName}</h4>
+                        <span class="text-xs font-black text-slate-500 block mt-1"><i class="fa-regular fa-clock mr-1 text-[#2563eb]"></i>เวลาสั่งเครื่องดื่ม: ${order.time} น.</span>
+                    </div>
+
+                    <div class="bg-slate-100/70 p-3 rounded-xl border border-slate-200">
+                        ${menuLineItems}
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1">
+                        <div class="max-w-[70%]">
+                            <span class="text-[10px] font-black text-slate-500 uppercase block">ระยะเวลาปรุงโดยประมาณ</span>
+                            <span class="inline-block text-xs font-black text-[#1d4ed8] bg-[#2563eb]/10 px-2.5 py-1 rounded-full border border-[#2563eb]/20 mt-1">
+                                <i class="fa-regular fa-hourglass-half mr-1 text-xs"></i> 
+                                ${order.prepTimeMin}-${order.prepTimeMax} นาที <span class="font-bold text-[10px] opacity-80">(±5 นาที)</span>
+                            </span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] font-black text-slate-500 block uppercase">ราคารวม</span>
+                            <span class="text-lg font-black text-slate-950">${order.totalAmount} ฿</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-200 pt-3 flex items-center justify-between">
+                        <span class="text-xs font-black text-slate-500 uppercase tracking-wide">${order.items.length} แก้ว • Ettaro App</span>
+                        ${actionsHTML}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Refresh Status Badge Totals
+            document.getElementById('totalPendingBadge').innerText = pending;
+            document.getElementById('totalPreparingBadge').innerText = prep;
+            document.getElementById('totalCompletedBadge').innerText = completed;
+        }
+
+        // Analyze shop metrics of closed orders
+        function calculateAndDisplayStats() {
+            const completedItems = queueList.filter(o => o.status === 'Completed');
+            const totalRevenue = completedItems.reduce((acc, current) => acc + current.totalAmount, 0);
+
+            document.getElementById('statsTotalOrders').innerText = completedItems.length;
+            document.getElementById('statsTotalRevenue').innerText = `${totalRevenue} ฿`;
+
+            // Quantify categories sales popularity ratio
+            let coffeeCount = 0;
+            let sodaCount = 0;
+            let nonCoffeeCount = 0;
+            let milkCount = 0;
+
+            completedItems.forEach(order => {
+                order.items.forEach(drink => {
+                    const matchedMenu = DRINK_MENUS.find(m => m.name === drink.name);
+                    if (matchedMenu) {
+                        if (matchedMenu.category === 'coffee') coffeeCount++;
+                        else if (matchedMenu.category === 'soda') sodaCount++;
+                        else if (matchedMenu.category === 'noncoffee') nonCoffeeCount++;
+                        else if (matchedMenu.category === 'milk') milkCount++;
+                    }
+                });
+            });
+
+            document.getElementById('statQtyCoffee').innerText = `${coffeeCount} แก้ว`;
+            document.getElementById('statQtySoda').innerText = `${sodaCount} แก้ว`;
+            document.getElementById('statQtyNonCoffee').innerText = `${nonCoffeeCount} แก้ว`;
+            document.getElementById('statQtyMilk').innerText = `${milkCount} แก้ว`;
+
+            const highestSingleCount = Math.max(coffeeCount, sodaCount, nonCoffeeCount, milkCount, 1);
+            
+            // Adjust linear progress chart
+            document.getElementById('barCoffee').style.width = `${(coffeeCount / highestSingleCount) * 100}%`;
+            document.getElementById('barSoda').style.width = `${(sodaCount / highestSingleCount) * 100}%`;
+            document.getElementById('barNonCoffee').style.width = `${(nonCoffeeCount / highestSingleCount) * 100}%`;
+            document.getElementById('barMilk').style.width = `${(milkCount / highestSingleCount) * 100}%`;
+        }
+    </script>
+</body>
+</html>
